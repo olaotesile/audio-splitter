@@ -1,21 +1,20 @@
 package com.audiosplitter.bridge.ui.theme
 
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
 
-// 💡 The "Lighting System" (Theme)
-// This tells every screen in the app: "Use these colors by default"
+// 💡 Updated "Lighting System"
+// Now using the Forest Green and Dark Gray theme.
 
 private val DarkColorScheme = darkColorScheme(
-    primary = NeonCyan,
-    secondary = ElectricPurple,
-    tertiary = GlassWhite,
-    background = DeepSpace,
-    surface = DeepSpace,
+    primary = ForestGreen,
+    secondary = PureWhite,
+    tertiary = GlassLayer,
+    background = DarkGray,
+    surface = DarkGray,
     onPrimary = PureWhite,
-    onSecondary = PureWhite,
+    onSecondary = DarkGray,
     onBackground = PureWhite,
     onSurface = PureWhite,
 )

@@ -2,12 +2,12 @@ package com.audiosplitter.bridge.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-// 🎨 Our "Paint Palette"
-// We want a premium, high-tech feel. No boring reds or blues!
+// 🎨 Updated "Paint Palette"
+// Based on your feedback: Dark Gray, Forest Green, and White.
 
-val DeepSpace = Color(0xFF0F172A)  // A very dark, almost black blue for the background
-val NeonCyan = Color(0xFF22D3EE)   // The "glow" for the bridge when it's active
-val ElectricPurple = Color(0xFF818CF8) // For the "local" sounds
-val GlassWhite = Color(0x1AFFFFFF) // Transparent white for that "glassmorphism" effect
-val SoftGray = Color(0xFF94A3B8)   // For text that isn't important
-val PureWhite = Color(0xFFF8FAFC)
+val DarkGray = Color(0xFF1E1E1E)   // "Almost Black" - the main wall color
+val ForestGreen = Color(0xFF2D5A27) // The "Active" glow color
+val PureWhite = Color(0xFFFFFFFF)  // For crisp text
+val SoftWhite = Color(0xCCFFFFFF)  // For secondary text (80% opaque)
+val GlassLayer = Color(0x1AFFFFFF) // For that premium see-through glass feel
+val AccentCrimson = Color(0xFFB91C1C) // A subtle red for "Stop" or "Muting"
