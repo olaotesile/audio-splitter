@@ -1,10 +1,19 @@
 package com.audiosplitter.bridge.ui
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.TextUnit
+import com.audiosplitter.bridge.ui.theme.*
 
 // 🛋️ The "Living Room" (Home Dashboard)
 // This is where we arrange all our "furniture" (the buttons, sliders, and cards).
@@ -15,9 +24,15 @@ fun HomeDashboard() {
     var bridgeVolume by remember { mutableFloatStateOf(0.7f) }
     var localVolume by remember { mutableFloatStateOf(0.5f) }
 
+    // 🌌 Premium Background Gradient
+    val backgroundBrush = Brush.verticalGradient(
+        colors = listOf(Obsidian, Gunmetal)
+    )
+
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(backgroundBrush)
             .padding(24.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
@@ -26,15 +41,16 @@ fun HomeDashboard() {
         Text(
             text = "AudioBridge",
             style = MaterialTheme.typography.headlineLarge,
-            color = MaterialTheme.colorScheme.onBackground
+            color = PureWhite
         )
         
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(4.dp))
         
         Text(
-            text = "The Patch Bay", 
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.primary // This is now our Forest Green!
+            text = "NATIVE AUDIO ROUTING", // More premium label
+            style = MaterialTheme.typography.labelSmall,
+            color = ForestGlow.copy(alpha = 0.8f),
+            letterSpacing = androidx.compose.ui.unit.TextUnit.Unspecified // Just a slight gap
         )
 
         Spacer(modifier = Modifier.height(32.dp))
@@ -94,39 +110,46 @@ fun HomeDashboard() {
 
         Spacer(modifier = Modifier.height(32.dp))
 
-        // 〰️ The Visualizer Placeholder
+        // 〰️ Premium Visualizer Window
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(64.dp)
-                .background(MaterialTheme.colorScheme.tertiary, RoundedCornerShape(8.dp)),
+                .height(80.dp)
+                .background(GlassSurface, RoundedCornerShape(12.dp))
+                .border(BorderStroke(1.dp, GlassBorder), RoundedCornerShape(12.dp)),
             contentAlignment = Alignment.Center
         ) {
+            // Placeholder for the actual visualizer bars
             Text(
-                text = "WAVEFORM VISUALIZER",
+                text = "BRIDGE MONITOR",
                 style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.3f)
+                color = ForestGlow.copy(alpha = 0.4f),
+                letterSpacing = androidx.compose.ui.unit.TextUnit.Unspecified
             )
         }
 
         Spacer(modifier = Modifier.weight(1f))
 
-        // 🏗️ The "Bridge" Switch
-        // For now, it's a big button that will eventually trigger the Golden Ticket.
+        // 🏗️ The Premium "Start" Button
         Button(
             onClick = { /* Start Bridge */ },
             colors = ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorScheme.primary,
-                contentColor = MaterialTheme.colorScheme.onPrimary
+                containerColor = ForestGlow,
+                contentColor = Obsidian
             ),
+            shape = RoundedCornerShape(12.dp),
             modifier = Modifier.fillMaxWidth().height(56.dp)
         ) {
-            Text("START AUDIO BRIDGE")
+            Text(
+                "INITIALIZE AUDIO BRIDGE", 
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = androidx.compose.ui.text.font.FontWeight.Bold
+            )
         }
     }
 }
 
-// 📦 Reusable Routing Card
+// 📦 Premium Glass Routing Card
 @Composable
 fun RoutingCard(
     title: String,
@@ -135,9 +158,15 @@ fun RoutingCard(
     onAction: () -> Unit
 ) {
     Card(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .border(
+                BorderStroke(1.dp, GlassBorder), 
+                RoundedCornerShape(16.dp)
+            ),
+        shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.tertiary // Our "Glass" layer
+            containerColor = GlassSurface // Transparent "Glass"
         )
     ) {
         Row(
@@ -146,8 +175,17 @@ fun RoutingCard(
                 .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // 🖼️ The Icon (e.g., Spotify logo or Speaker icon)
-            Text(text = icon, style = MaterialTheme.typography.headlineMedium)
+            // 🖼️ The Icon
+            Surface(
+                modifier = Modifier.size(48.dp),
+                shape = RoundedCornerShape(12.dp),
+                color = ForestGlass,
+                border = BorderStroke(1.dp, ForestGlow.copy(alpha = 0.3f))
+            ) {
+                Box(contentAlignment = Alignment.Center) {
+                    Text(text = icon, style = MaterialTheme.typography.headlineSmall)
+                }
+            }
             
             Spacer(modifier = Modifier.width(16.dp))
 
@@ -155,18 +193,21 @@ fun RoutingCard(
                 Text(
                     text = title,
                     style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.primary.copy(alpha = 0.7f)
+                    color = MutedSilver
                 )
                 Text(
                     text = name,
-                    style = MaterialTheme.typography.titleLarge,
-                    color = MaterialTheme.colorScheme.onBackground
+                    style = MaterialTheme.typography.titleMedium,
+                    color = PureWhite
                 )
             }
 
             // 🖱️ The "Change" Button
-            TextButton(onClick = onAction) {
-                Text("CHANGE", color = MaterialTheme.colorScheme.primary)
+            TextButton(
+                onClick = onAction,
+                colors = ButtonDefaults.textButtonColors(contentColor = ForestGlow)
+            ) {
+                Text("SELECT", style = MaterialTheme.typography.labelLarge)
             }
         }
     }
@@ -179,24 +220,28 @@ fun MixerSlider(
     value: Float,
     onValueChange: (Float) -> Unit,
     modifier: Modifier = Modifier,
-    activeColor: androidx.compose.ui.graphics.Color
+    activeColor: Color
 ) {
     Column(
-        modifier = modifier,
+        modifier = modifier
+            .background(GlassSurface, RoundedCornerShape(12.dp))
+            .border(BorderStroke(1.dp, GlassBorder), RoundedCornerShape(12.dp))
+            .padding(12.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
             text = label,
             style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f)
+            color = MutedSilver
         )
+        Spacer(modifier = Modifier.height(8.dp))
         Slider(
             value = value,
             onValueChange = onValueChange,
             colors = SliderDefaults.colors(
-                thumbColor = activeColor,
+                thumbColor = PureWhite,
                 activeTrackColor = activeColor,
-                inactiveTrackColor = activeColor.copy(alpha = 0.2f)
+                inactiveTrackColor = Gunmetal
             )
         )
         Text(

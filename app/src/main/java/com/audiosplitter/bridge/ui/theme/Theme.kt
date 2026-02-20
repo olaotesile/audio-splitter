@@ -4,19 +4,18 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
 
-// 💡 Updated "Lighting System"
-// Now using the Forest Green and Dark Gray theme.
+// 💡 Premium "Obsidian" Lighting System
 
 private val DarkColorScheme = darkColorScheme(
-    primary = ForestGreen,
-    secondary = PureWhite,
-    tertiary = GlassLayer,
-    background = DarkGray,
-    surface = DarkGray,
-    onPrimary = PureWhite,
-    onSecondary = DarkGray,
-    onBackground = PureWhite,
-    onSurface = PureWhite,
+    primary = ForestGlow,        // Brighter green for highlights
+    secondary = SilverText,      // Silver for labels
+    tertiary = GlassSurface,     // Glassmorphism base
+    background = Obsidian,       // True premium dark background
+    surface = Gunmetal,          // Slightly lighter for cards
+    onPrimary = Obsidian,        // Black text on green buttons
+    onSecondary = Obsidian,
+    onBackground = SilverText,
+    onSurface = SilverText,
 )
 
 @Composable

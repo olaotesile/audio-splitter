@@ -2,12 +2,17 @@ package com.audiosplitter.bridge.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-// 🎨 Updated "Paint Palette"
-// Based on your feedback: Dark Gray, Forest Green, and White.
+// 🎨 Premium "High-End" Palette
+// Monochrome core with Deep Forest Green accents. 
 
-val DarkGray = Color(0xFF1E1E1E)   // "Almost Black" - the main wall color
-val ForestGreen = Color(0xFF2D5A27) // The "Active" glow color
-val PureWhite = Color(0xFFFFFFFF)  // For crisp text
-val SoftWhite = Color(0xCCFFFFFF)  // For secondary text (80% opaque)
-val GlassLayer = Color(0x1AFFFFFF) // For that premium see-through glass feel
-val AccentCrimson = Color(0xFFB91C1C) // A subtle red for "Stop" or "Muting"
+val Obsidian = Color(0xFF0A0A0A)   // True premium dark
+val Gunmetal = Color(0xFF1A1A1A)   // Secondary surfaces
+val ForestAccent = Color(0xFF1B4332) // Deep premium forest green
+val ForestGlow = Color(0xFF40916C)   // Brighter green for active states
+val SilverText = Color(0xFFE5E5E5)   // Crisp, high-end text
+val MutedSilver = Color(0xFF999999)  // Subdued labels
+
+// 🌫️ Glassmorphism Tokens
+val GlassBorder = Color(0x33FFFFFF) // Subtle white border for glass
+val GlassSurface = Color(0x1AFFFFFF) // 10% white for the glass "frosted" look
+val ForestGlass = Color(0x261B4332)  // Translucent forest green for tinted glass
