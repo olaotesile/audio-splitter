@@ -20,6 +20,10 @@ class AudioBridgeService : Service() {
 
     private var mediaProjection: MediaProjection? = null
     private var captureProcessor: AudioCaptureProcessor? = null
+    private var routingEngine: AudioRoutingEngine? = null
+    private var bridgeThread: Thread? = null
+    private var isBridging = false
+    
     private val CHANNEL_ID = "audio_bridge_service_channel"
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -43,10 +47,10 @@ class AudioBridgeService : Service() {
         val manager = getSystemService(NotificationManager::class.java)
         manager.createNotificationChannel(channel)
 
-        val notification: Notification = NotificationCompat.Builder(this, CHANNEL_ID)
+        val notification: android.app.Notification = NotificationCompat.Builder(this, CHANNEL_ID)
             .setContentTitle("AudioBridge is Active")
             .setContentText("Routing Spotify to Bluetooth Speaker")
-            .setSmallIcon(android.R.drawable.ic_media_play) // Standard system play icon
+            .setSmallIcon(android.R.drawable.ic_media_play)
             .build()
 
         startForeground(1, notification)
@@ -57,15 +61,34 @@ class AudioBridgeService : Service() {
         mediaProjection = projectionManager.getMediaProjection(resultCode, resultData)
         
         mediaProjection?.let { projection ->
+            // 📡 Initialize the Sensor
             captureProcessor = AudioCaptureProcessor(projection)
-            // For now, we'll use a placeholder UID
-            // We'll add the "Select App" logic to get real UIDs in Phase 1 polish
-            // bridgeProcessor?.startCapture(10085) // Example Spotify UID
+            
+            // 🚿 Initialize the Pipe
+            routingEngine = AudioRoutingEngine()
+            
+            // 🏃 Start the High-Speed "Bucket" Loop
+            isBridging = true
+            bridgeThread = Thread {
+                val buffer = ShortArray(1024)
+                captureProcessor?.startCapture(10085) // Placeholder Spotify UID
+                routingEngine?.startRouting()
+
+                while (isBridging) {
+                    val read = captureProcessor?.read(buffer, buffer.size) ?: 0
+                    if (read > 0) {
+                        routingEngine?.write(buffer, read)
+                    }
+                }
+            }.apply { start() }
         }
     }
 
     override fun onDestroy() {
+        isBridging = false
+        bridgeThread?.join()
         captureProcessor?.stopCapture()
+        routingEngine?.stopRouting()
         mediaProjection?.stop()
         super.onDestroy()
     }
