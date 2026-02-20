@@ -12,17 +12,32 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.TextUnit
-import com.audiosplitter.bridge.ui.theme.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.ui.platform.LocalContext
+import com.audiosplitter.bridge.utils.*
 
 // 🛋️ The "Living Room" (Home Dashboard)
 // This is where we arrange all our "furniture" (the buttons, sliders, and cards).
 // For now, it's just a placeholder so we can see the "Interior Design" come together.
 
 @Composable
-fun HomeDashboard() {
+fun HomeDashboard(
+    onStartBridge: () -> Unit
+) {
+    val context = LocalContext.current
+    val appUtils = remember { AppUtils(context) }
+    val bluetoothUtils = remember { BluetoothUtils(context) }
+
     var bridgeVolume by remember { mutableFloatStateOf(0.7f) }
     var localVolume by remember { mutableFloatStateOf(0.5f) }
+
+    // 📱 Selection State
+    var selectedApp by remember { mutableStateOf(AppInfo("Spotify", "com.spotify.music", 10085)) }
+    var selectedDevice by remember { mutableStateOf(DeviceInfo("Bluetooth Speaker", "")) }
+    
+    var showAppPicker by remember { mutableStateOf(false) }
+    var showDevicePicker by remember { mutableStateOf(false) }
 
     // 🌌 Premium Background Gradient
     val backgroundBrush = Brush.verticalGradient(
@@ -58,9 +73,9 @@ fun HomeDashboard() {
         // 🔌 The "Source" Card (Where the music comes from)
         RoutingCard(
             title = "SOURCE APP",
-            name = "Spotify",
-            icon = "�", // Placeholder icon
-            onAction = { /* We'll handle "Change App" later */ }
+            name = selectedApp.name,
+            icon = "🎵", // Placeholder icon
+            onAction = { showAppPicker = true }
         )
 
         Spacer(modifier = Modifier.height(24.dp))
@@ -68,9 +83,9 @@ fun HomeDashboard() {
         // 🔊 The "Destination" Card (Where the music goes)
         RoutingCard(
             title = "OUTPUT DEVICE",
-            name = "Bluetooth Speaker",
+            name = selectedDevice.name,
             icon = "🔊", // Placeholder icon
-            onAction = { /* We'll handle "Select Device" later */ }
+            onAction = { showDevicePicker = true }
         )
 
         Spacer(modifier = Modifier.height(40.dp))
@@ -110,29 +125,11 @@ fun HomeDashboard() {
 
         Spacer(modifier = Modifier.height(32.dp))
 
-        // 〰️ Premium Visualizer Window
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(80.dp)
-                .background(GlassSurface, RoundedCornerShape(12.dp))
-                .border(BorderStroke(1.dp, GlassBorder), RoundedCornerShape(12.dp)),
-            contentAlignment = Alignment.Center
-        ) {
-            // Placeholder for the actual visualizer bars
-            Text(
-                text = "BRIDGE MONITOR",
-                style = MaterialTheme.typography.labelSmall,
-                color = ForestGlow.copy(alpha = 0.4f),
-                letterSpacing = androidx.compose.ui.unit.TextUnit.Unspecified
-            )
-        }
-
         Spacer(modifier = Modifier.weight(1f))
 
         // 🏗️ The Premium "Start" Button
         Button(
-            onClick = { /* Start Bridge */ },
+            onClick = onStartBridge,
             colors = ButtonDefaults.buttonColors(
                 containerColor = ForestGlow,
                 contentColor = Obsidian
@@ -147,6 +144,71 @@ fun HomeDashboard() {
             )
         }
     }
+
+    // 📄 The Selection Dialogs
+    if (showAppPicker) {
+        SelectionDialog(
+            title = "Select App",
+            items = appUtils.getInstalledApps(),
+            onDismiss = { showAppPicker = false },
+            onSelect = { 
+                selectedApp = it as AppInfo
+                showAppPicker = false 
+            },
+            itemLabel = { (it as AppInfo).name }
+        )
+    }
+
+    if (showDevicePicker) {
+        SelectionDialog(
+            title = "Select Output",
+            items = bluetoothUtils.getPairedDevices(),
+            onDismiss = { showDevicePicker = false },
+            onSelect = { 
+                selectedDevice = it as DeviceInfo
+                showDevicePicker = false 
+            },
+            itemLabel = { (it as DeviceInfo).name }
+        )
+    }
+}
+
+// 📄 Reusable Selection Dialog
+@Composable
+fun SelectionDialog(
+    title: String,
+    items: List<Any>,
+    onDismiss: () -> Unit,
+    onSelect: (Any) -> Unit,
+    itemLabel: (Any) -> String
+) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(title, color = PureWhite) },
+        containerColor = Gunmetal,
+        tonalElevation = 8.dp,
+        text = {
+            LazyColumn {
+                items(items) { item ->
+                    TextButton(
+                        onClick = { onSelect(item) },
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text(
+                            text = itemLabel(item),
+                            color = SilverText,
+                            modifier = Modifier.padding(8.dp)
+                        )
+                    }
+                }
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = onDismiss) {
+                Text("CLOSE", color = ForestGlow)
+            }
+        }
+    )
 }
 
 // 📦 Premium Glass Routing Card
